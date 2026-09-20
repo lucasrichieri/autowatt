@@ -2,11 +2,10 @@
   "name": "autowatt",
   "version": "1.0.0",
   "description": "Website institucional oficial da AUTOWATT Engenharia",
-  "main": "server.js",
   "scripts": {
-    "dev": "node server.js",
-    "start": "node server.js",
-    "serve": "node server.js"
+    "dev": "node dev-server.js",
+    "start": "node dev-server.js",
+    "serve": "node dev-server.js"
   },
   "keywords": [
     "engenharia-eletrica",
