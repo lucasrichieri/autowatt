@@ -1,0 +1,20 @@
+{
+  "name": "autowatt",
+  "version": "1.0.0",
+  "description": "Website institucional oficial da AUTOWATT Engenharia",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "serve": "node server.js"
+  },
+  "keywords": [
+    "engenharia-eletrica",
+    "energia-solar",
+    "carregadores-ve",
+    "laudos-eletricos",
+    "autowatt"
+  ],
+  "author": "AUTOWATT Engenharia",
+  "license": "ISC"
+}
