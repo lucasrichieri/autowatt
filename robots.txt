@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://autowatt.eng.br/sitemap.xml
+Sitemap: https://autowattengenharia.com.br/sitemap.xml
