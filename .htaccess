@@ -1,0 +1,50 @@
+# ==============================================================================
+# AUTOWATT ENGENHARIA - CONFIGURAÇÃO APACHE / LITESPEED (HOSTINGER)
+# Forçar HTTPS, Otimização de Performance, Cache e Segurança
+# ==============================================================================
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # 1. Forçar HTTPS (Redirecionar HTTP -> HTTPS 301 Permanente)
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# 2. Cabeçalhos de Segurança
+<IfModule mod_headers.c>
+  # Forçar conexão segura por 1 ano (HSTS)
+  Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" env=HTTPS
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set X-XSS-Protection "1; mode=block"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# 3. Compressão GZIP / Deflate para Carregamento Ultrarrápido
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+  AddOutputFilterByType DEFLATE application/javascript application/x-javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# 4. Cache de Navegador (Browser Caching)
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 month"
+
+  # Imagens e Mídia (1 ano)
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+
+  # CSS e JavaScript (1 mês)
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+
+  # HTML (sempre atualizado)
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
