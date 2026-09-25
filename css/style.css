@@ -762,9 +762,14 @@ ul {
 .about-grid {
   display: grid;
   grid-template-columns: 1.12fr 0.88fr;
+  grid-template-areas: "narrative founder";
   gap: 48px;
   align-items: start;
   margin-bottom: 56px;
+}
+
+.about-narrative {
+  grid-area: narrative;
 }
 
 .about-narrative p {
@@ -853,6 +858,7 @@ ul {
 
 /* Card Flutuante Oficial do Fundador */
 .about-founder-wrapper {
+  grid-area: founder;
   position: relative;
   width: 100%;
 }
@@ -2278,6 +2284,22 @@ textarea.form-control {
 }
 
 @media (max-width: 992px) {
+  /* Ordem Mobile: Card do Fundador Aparece Primeiro */
+  .about-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 32px !important;
+  }
+  .about-founder-wrapper {
+    order: -1 !important;
+    width: 100% !important;
+    max-width: 620px !important;
+    margin: 0 auto 12px auto !important;
+  }
+  .about-narrative {
+    order: 2 !important;
+    width: 100% !important;
+  }
   .credentials-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
@@ -2458,7 +2480,23 @@ textarea.form-control {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
   }
 
-  /* Card do Fundador Mobile */
+  /* Card do Fundador e Seção Sobre Nós Mobile */
+  .about-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 24px !important;
+    width: 100% !important;
+  }
+  .about-founder-wrapper {
+    order: -1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto 12px auto !important;
+  }
+  .about-narrative {
+    order: 2 !important;
+    width: 100% !important;
+  }
   .about-founder-floating-badge {
     position: static;
     margin: 12px 14px;
@@ -2495,7 +2533,7 @@ textarea.form-control {
     max-width: 100%;
     box-sizing: border-box;
   }
-  .about-grid, .calculator-grid, .segment-pane.active, .feature-ev-grid, .contact-grid {
+  .calculator-grid, .segment-pane.active, .feature-ev-grid, .contact-grid {
     grid-template-columns: 1fr;
     gap: 24px;
     width: 100%;
