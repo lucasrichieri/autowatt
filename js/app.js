@@ -468,50 +468,154 @@ function initLgpdBanner() {
 }
 
 /* ==========================================================================
-   HUB DE BAIRROS DE SÃO PAULO (BUSCA & FILTRO POR ZONA)
+   BUSCA RÁPIDA E DISCRETA DE BAIRROS DE SÃO PAULO
    ========================================================================== */
 function initBairrosHub() {
-  const searchInput = document.getElementById('bairroSearchInput');
-  const chipsContainer = document.getElementById('bairrosZoneChips');
-  const grid = document.getElementById('bairrosCardsGrid');
+  const quickInput = document.getElementById('bairroQuickSearch');
+  const quickResults = document.getElementById('bairroQuickResults');
+  
+  // Base rápida de dados dos bairros
+  const bairrosList = [
+    { name: 'Água Rasa', slug: 'agua-rasa', zone: 'Zona Leste' },
+    { name: 'Alto de Pinheiros', slug: 'alto-de-pinheiros', zone: 'Zona Oeste' },
+    { name: 'Anhanguera', slug: 'anhanguera', zone: 'Zona Norte' },
+    { name: 'Aricanduva', slug: 'aricanduva', zone: 'Zona Leste' },
+    { name: 'Artur Alvim', slug: 'artur-alvim', zone: 'Zona Leste' },
+    { name: 'Barra Funda', slug: 'barra-funda', zone: 'Zona Oeste' },
+    { name: 'Bela Vista', slug: 'bela-vista', zone: 'Centro' },
+    { name: 'Belém', slug: 'belem', zone: 'Zona Leste' },
+    { name: 'Bom Retiro', slug: 'bom-retiro', zone: 'Centro' },
+    { name: 'Brasilândia', slug: 'brasilandia', zone: 'Zona Norte' },
+    { name: 'Butantã', slug: 'butanta', zone: 'Zona Oeste' },
+    { name: 'Cachoeirinha', slug: 'cachoeirinha', zone: 'Zona Norte' },
+    { name: 'Cambuci', slug: 'cambuci', zone: 'Centro' },
+    { name: 'Campo Belo', slug: 'campo-belo', zone: 'Zona Sul' },
+    { name: 'Campo Grande', slug: 'campo-grande', zone: 'Zona Sul' },
+    { name: 'Campo Limpo', slug: 'campo-limpo', zone: 'Zona Sul' },
+    { name: 'Cangaíba', slug: 'cangaiba', zone: 'Zona Leste' },
+    { name: 'Capão Redondo', slug: 'capao-redondo', zone: 'Zona Sul' },
+    { name: 'Carrão', slug: 'carrao', zone: 'Zona Leste' },
+    { name: 'Casa Verde', slug: 'casa-verde', zone: 'Zona Norte' },
+    { name: 'Cidade Ademar', slug: 'cidade-ademar', zone: 'Zona Sul' },
+    { name: 'Cidade Dutra', slug: 'cidade-dutra', zone: 'Zona Sul' },
+    { name: 'Cidade Líder', slug: 'cidade-lider', zone: 'Zona Leste' },
+    { name: 'Cidade Tiradentes', slug: 'cidade-tiradentes', zone: 'Zona Leste' },
+    { name: 'Consolação', slug: 'consolacao', zone: 'Centro' },
+    { name: 'Cursino', slug: 'cursino', zone: 'Zona Sul' },
+    { name: 'Ermelino Matarazzo', slug: 'ermelino-matarazzo', zone: 'Zona Leste' },
+    { name: 'Freguesia do Ó', slug: 'freguesia-do-o', zone: 'Zona Norte' },
+    { name: 'Grajaú', slug: 'grajau', zone: 'Zona Sul' },
+    { name: 'Guaianases', slug: 'guaianases', zone: 'Zona Leste' },
+    { name: 'Iguatemi', slug: 'iguatemi', zone: 'Zona Leste' },
+    { name: 'Ipiranga', slug: 'ipiranga', zone: 'Zona Sul' },
+    { name: 'Itaim Bibi', slug: 'itaim-bibi', zone: 'Zona Sul' },
+    { name: 'Itaim Paulista', slug: 'itaim-paulista', zone: 'Zona Leste' },
+    { name: 'Itaquera', slug: 'itaquera', zone: 'Zona Leste' },
+    { name: 'Jabaquara', slug: 'jabaquara', zone: 'Zona Sul' },
+    { name: 'Jaçanã', slug: 'jacana', zone: 'Zona Norte' },
+    { name: 'Jaguara', slug: 'jaguara', zone: 'Zona Oeste' },
+    { name: 'Jaguaré', slug: 'jaguare', zone: 'Zona Oeste' },
+    { name: 'Jaraguá', slug: 'jaragua', zone: 'Zona Norte' },
+    { name: 'Jardim Ângela', slug: 'jardim-angela', zone: 'Zona Sul' },
+    { name: 'Jardim Helena', slug: 'jardim-helena', zone: 'Zona Leste' },
+    { name: 'Jardim Paulista', slug: 'jardim-paulista', zone: 'Zona Oeste' },
+    { name: 'Jardim São Luís', slug: 'jardim-sao-luis', zone: 'Zona Sul' },
+    { name: 'Lapa', slug: 'lapa', zone: 'Zona Oeste' },
+    { name: 'Liberdade', slug: 'liberdade', zone: 'Centro' },
+    { name: 'Limão', slug: 'limao', zone: 'Zona Norte' },
+    { name: 'Mandaqui', slug: 'mandaqui', zone: 'Zona Norte' },
+    { name: 'Marsilac', slug: 'marsilac', zone: 'Zona Sul' },
+    { name: 'Moema', slug: 'moema', zone: 'Zona Sul' },
+    { name: 'Mooca', slug: 'mooca', zone: 'Zona Leste' },
+    { name: 'Morumbi', slug: 'morumbi', zone: 'Zona Sul' },
+    { name: 'Parelheiros', slug: 'parelheiros', zone: 'Zona Sul' },
+    { name: 'Pari', slug: 'pari', zone: 'Centro' },
+    { name: 'Parque do Carmo', slug: 'parque-do-carmo', zone: 'Zona Leste' },
+    { name: 'Penha', slug: 'penha', zone: 'Zona Leste' },
+    { name: 'Perdizes', slug: 'perdizes', zone: 'Zona Oeste' },
+    { name: 'Pinheiros', slug: 'pinheiros', zone: 'Zona Oeste' },
+    { name: 'Ponte Rasa', slug: 'ponte-rasa', zone: 'Zona Leste' },
+    { name: 'Raposo Tavares', slug: 'raposo-tavares', zone: 'Zona Oeste' },
+    { name: 'República', slug: 'republica', zone: 'Centro' },
+    { name: 'Rio Pequeno', slug: 'rio-pequeno', zone: 'Zona Oeste' },
+    { name: 'Sacomã', slug: 'sacoma', zone: 'Zona Sul' },
+    { name: 'Santa Cecília', slug: 'santa-cecilia', zone: 'Centro' },
+    { name: 'Santana', slug: 'santana', zone: 'Zona Norte' },
+    { name: 'Santo Amaro', slug: 'santo-amaro', zone: 'Zona Sul' },
+    { name: 'São Domingos', slug: 'sao-domingos', zone: 'Zona Oeste' },
+    { name: 'São Lucas', slug: 'sao-lucas', zone: 'Zona Leste' },
+    { name: 'São Mateus', slug: 'sao-mateus', zone: 'Zona Leste' },
+    { name: 'São Miguel Paulista', slug: 'sao-miguel-paulista', zone: 'Zona Leste' },
+    { name: 'São Rafael', slug: 'sao-rafael', zone: 'Zona Leste' },
+    { name: 'Sapopemba', slug: 'sapopemba', zone: 'Zona Leste' },
+    { name: 'Saúde', slug: 'saude', zone: 'Zona Sul' },
+    { name: 'Sé', slug: 'se', zone: 'Centro' },
+    { name: 'Tatuapé', slug: 'tatuape', zone: 'Zona Leste' },
+    { name: 'Tremembé', slug: 'tremembe', zone: 'Zona Norte' },
+    { name: 'Tucuruvi', slug: 'tucuruvi', zone: 'Zona Norte' },
+    { name: 'Vila Andrade', slug: 'vila-andrade', zone: 'Zona Sul' },
+    { name: 'Vila Curuçá', slug: 'vila-curuca', zone: 'Zona Leste' },
+    { name: 'Vila Formosa', slug: 'vila-formosa', zone: 'Zona Leste' },
+    { name: 'Vila Guilherme', slug: 'vila-guilherme', zone: 'Zona Norte' },
+    { name: 'Vila Jacuí', slug: 'vila-jacui', zone: 'Zona Leste' },
+    { name: 'Vila Leopoldina', slug: 'vila-leopoldina', zone: 'Zona Oeste' },
+    { name: 'Vila Maria', slug: 'vila-maria', zone: 'Zona Norte' },
+    { name: 'Vila Mariana', slug: 'vila-mariana', zone: 'Zona Sul' },
+    { name: 'Vila Matilde', slug: 'vila-matilde', zone: 'Zona Leste' },
+    { name: 'Vila Medeiros', slug: 'vila-medeiros', zone: 'Zona Norte' },
+    { name: 'Vila Prudente', slug: 'vila-prudente', zone: 'Zona Leste' },
+    { name: 'Vila Sônia', slug: 'vila-sonia', zone: 'Zona Oeste' }
+  ];
 
-  if (!grid) return;
+  if (!quickInput || !quickResults) return;
 
-  const cards = grid.querySelectorAll('.bairro-card-item');
-  let currentZoneFilter = 'all';
+  function handleSearch() {
+    const term = quickInput.value.toLowerCase().trim();
+    if (!term) {
+      quickResults.style.display = 'none';
+      quickResults.innerHTML = '';
+      return;
+    }
 
-  function filterCards() {
-    const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const matched = bairrosList.filter(b => 
+      b.name.toLowerCase().includes(term) || b.zone.toLowerCase().includes(term)
+    );
 
-    cards.forEach(card => {
-      const name = card.getAttribute('data-bairro') || '';
-      const zone = card.getAttribute('data-zone') || '';
+    if (matched.length === 0) {
+      quickResults.style.display = 'block';
+      quickResults.innerHTML = `
+        <div style="padding:10px 12px; font-size:0.84rem; color:#64748B;">
+          Nenhum bairro encontrado com "<strong>\${term}</strong>". Atendemos toda a Capital SP e Grande SP.
+        </div>
+      `;
+      return;
+    }
 
-      const matchesQuery = !query || name.includes(query) || zone.toLowerCase().includes(query);
-      const matchesZone = currentZoneFilter === 'all' || zone === currentZoneFilter;
-
-      if (matchesQuery && matchesZone) {
-        card.style.display = 'flex';
-      } else {
-        card.style.display = 'none';
-      }
-    });
+    quickResults.style.display = 'block';
+    quickResults.innerHTML = matched.slice(0, 8).map(b => `
+      <a href="bairros/\${b.slug}.html" class="discreet-dropdown-item">
+        <div>
+          <strong>\${b.name}</strong>
+          <span style="font-size:0.75rem; color:#64748B; margin-left:6px;">(\${b.zone})</span>
+        </div>
+        <div style="display:flex; gap:8px; font-size:0.75rem; font-weight:600; color:var(--color-accent-orange);">
+          <span>Ver Serviços &rarr;</span>
+        </div>
+      </a>
+    `).join('');
   }
 
-  if (searchInput) {
-    searchInput.addEventListener('input', filterCards);
-  }
+  quickInput.addEventListener('input', handleSearch);
+  quickInput.addEventListener('focus', () => {
+    if (quickInput.value.trim()) handleSearch();
+  });
 
-  if (chipsContainer) {
-    const chips = chipsContainer.querySelectorAll('.zone-chip');
-    chips.forEach(chip => {
-      chip.addEventListener('click', () => {
-        chips.forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        currentZoneFilter = chip.getAttribute('data-filter') || 'all';
-        filterCards();
-      });
-    });
-  }
+  // Fecha o dropdown ao clicar fora
+  document.addEventListener('click', (e) => {
+    if (!quickInput.contains(e.target) && !quickResults.contains(e.target)) {
+      quickResults.style.display = 'none';
+    }
+  });
 }
+
 
