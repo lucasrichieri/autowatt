@@ -16,6 +16,10 @@
     {
       "src": "imagens/**",
       "use": "@vercel/static"
+    },
+    {
+      "src": "bairros/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -41,6 +45,14 @@
         "Cache-Control": "no-cache, no-store, must-revalidate"
       },
       "dest": "/imagens/$1"
+    },
+    {
+      "src": "/bairros/(.*)",
+      "headers": {
+        "Content-Type": "text/html; charset=UTF-8",
+        "Cache-Control": "no-cache, no-store, must-revalidate"
+      },
+      "dest": "/bairros/$1"
     },
     {
       "src": "/robots.txt",

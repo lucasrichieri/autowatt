@@ -168,6 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initServicesFilterAndModal();
   initSegmentsTabs();
   initFaqAccordion();
+  initBairrosHub();
   initContactForm();
   initLgpdBanner();
 });
@@ -465,3 +466,52 @@ function initLgpdBanner() {
     banner.classList.remove('show');
   });
 }
+
+/* ==========================================================================
+   HUB DE BAIRROS DE SÃO PAULO (BUSCA & FILTRO POR ZONA)
+   ========================================================================== */
+function initBairrosHub() {
+  const searchInput = document.getElementById('bairroSearchInput');
+  const chipsContainer = document.getElementById('bairrosZoneChips');
+  const grid = document.getElementById('bairrosCardsGrid');
+
+  if (!grid) return;
+
+  const cards = grid.querySelectorAll('.bairro-card-item');
+  let currentZoneFilter = 'all';
+
+  function filterCards() {
+    const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+
+    cards.forEach(card => {
+      const name = card.getAttribute('data-bairro') || '';
+      const zone = card.getAttribute('data-zone') || '';
+
+      const matchesQuery = !query || name.includes(query) || zone.toLowerCase().includes(query);
+      const matchesZone = currentZoneFilter === 'all' || zone === currentZoneFilter;
+
+      if (matchesQuery && matchesZone) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', filterCards);
+  }
+
+  if (chipsContainer) {
+    const chips = chipsContainer.querySelectorAll('.zone-chip');
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        currentZoneFilter = chip.getAttribute('data-filter') || 'all';
+        filterCards();
+      });
+    });
+  }
+}
+
